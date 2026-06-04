@@ -11,40 +11,47 @@
         .container { text-align: center; }
         input { padding: 10px; font-size: 18px; width: 80%; margin: 20px 0; }
         button { padding: 10px 30px; font-size: 18px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        #result { margin-top: 30px; font-size: 20px; font-weight: bold; }
+        #result { margin-top: 30px; font-size: 20px; font-weight: bold; min-height: 30px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>闰年判断器</h1>
         <input type="number" id="yearInput" placeholder="请输入年份">
-        <button py-click="check_leap()">判断</button>
+        <button id="checkBtn">判断</button>
         <div id="result"></div>
     </div>
 
     <py-script>
+        from pyscript import when, document
+
         def is_leap_year(year):
             if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
                 return True
             else:
                 return False
 
-        def check_leap():
-            year_input = Element("yearInput").element.value
-            result_element = Element("result")
+        @when("click", "#checkBtn")
+        def check_leap(event):
+            year_input = document.getElementById("yearInput").value
+            result_element = document.getElementById("result")
             
             if not year_input:
-                result_element.write("请输入一个年份！")
+                result_element.textContent = "请输入一个年份！"
+                result_element.style.color = "#ff9800"
                 return
             
             try:
                 year = int(year_input)
                 if is_leap_year(year):
-                    result_element.write(f"✅ {year}年 是闰年")
+                    result_element.textContent = f"✅ {year}年 是闰年"
+                    result_element.style.color = "#4CAF50"
                 else:
-                    result_element.write(f"❌ {year}年 不是闰年")
+                    result_element.textContent = f"❌ {year}年 不是闰年"
+                    result_element.style.color = "#f44336"
             except ValueError:
-                result_element.write("❌ 请输入有效的整数年份！")
+                result_element.textContent = "❌ 请输入有效的整数年份！"
+                result_element.style.color = "#f44336"
     </py-script>
 </body>
 </html>
